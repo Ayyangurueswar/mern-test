@@ -58,6 +58,6 @@ app.use((err, req, res, next) => {
   });
 });
 
-app.listen(7000, async () => {
-  console.log("Server is running on port 7000");
-});
+export default (req, res) => {
+  return app(req, res);
+}
