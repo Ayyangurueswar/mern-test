@@ -1,4 +1,4 @@
-import React, {useState} from 'react'
+import React, {useState, useEffect} from 'react'
 import { useAuth } from '../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
@@ -36,6 +36,12 @@ const Register = () => {
         alert(error);
     }
   }
+  const token = localStorage.getItem('token');
+  useEffect(() => {
+    if (token) {
+        navigate('/');
+    }
+  }, [token]);
   return (
     <div className='w-full h-full flex items-center justify-center'>
         <div className='w-1/3 my-6'>
