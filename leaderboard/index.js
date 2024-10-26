@@ -12,7 +12,6 @@ const app = express();
 await connectDb();
 
 // Use cors middleware
-app.options('*', cors());
 app.use(
   cors({
     origin: "https://mern-test-frontend-smoky.vercel.app", // Replace with the frontend's URL (React app)
@@ -20,6 +19,10 @@ app.use(
     allowedHeaders: ['Content-Type', 'Authorization']
   })
 );
+app.options('*', cors());
+app.options('/*', (req, res) => {
+  res.sendStatus(200);
+})
 
 //middle wares
 app.use(express.json());
