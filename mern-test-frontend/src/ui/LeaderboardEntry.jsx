@@ -7,7 +7,7 @@ const LeaderboardEntry = ({data, rank}) => {
   const [history, setHistory] = useState([]);
   const handleClick = async () => {
     try{
-      const req = await toast.promise(fetch(`${process.env.REACT_APP_API_URL}/api/user/v1/your-history`, {
+      const req = await toast.promise(fetch(`/api/user/v1/your-history`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

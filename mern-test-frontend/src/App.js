@@ -20,6 +20,7 @@ function App() {
             <Route path='/register' element={<Register />}/>
             <Route path='/login' element={<Login />}/>
             <Route path='/leaderboard' element={<LeaderBoard />}/>
+            <Route path='*' element={<p>404 - Not found</p>} />
           </Routes>
           <div id='modal-root'></div>
           <ToastContainer theme='colored' newestOnTop/>

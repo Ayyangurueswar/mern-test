@@ -19,7 +19,7 @@ export const AuthProvider = ({children}) => {
     const [user, setUser] = useState();
     const navigate = useNavigate();
     const register = async (user) => {
-        const req = await toast.promise(fetch(`${process.env.REACT_APP_API_URL}/api/auth/v1/register`, {
+        const req = await toast.promise(fetch(`/api/auth/v1/register`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -40,7 +40,7 @@ export const AuthProvider = ({children}) => {
         localStorage.setItem("token", JSON.stringify(res.token));
     }
     const login = async (user) => {
-        const req = await toast.promise(fetch(`${process.env.REACT_APP_API_URL}/api/auth/v1/login`, {
+        const req = await toast.promise(fetch(`/api/auth/v1/login`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -69,7 +69,7 @@ export const AuthProvider = ({children}) => {
     useEffect(() => {
         const token = JSON.parse(localStorage.getItem("token"));
         if(token){
-            fetch(`${process.env.REACT_APP_API_URL}/api/user/v1/get-users-info`, {
+            fetch(`/api/user/v1/get-users-info`, {
                 method: 'POST',
                 headers: {
                     'Authorization': token,
