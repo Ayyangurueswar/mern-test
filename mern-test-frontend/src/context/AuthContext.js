@@ -1,4 +1,6 @@
 import { createContext, useContext, useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
 const initialState = {
     user: null,
@@ -15,39 +17,54 @@ export const useAuth = () => {
 
 export const AuthProvider = ({children}) => {
     const [user, setUser] = useState();
+    const navigate = useNavigate();
     const register = async (user) => {
-        const req = await fetch(`${process.env.REACT_APP_API_URL}/api/auth/v1/register`, {
+        const req = await toast.promise(fetch(`${process.env.REACT_APP_API_URL}/api/auth/v1/register`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify(user),
-        });
-        if(!req.ok){
-            throw new Error('Failed to register');
-        }
+        }), {
+            pending: 'Registering...'
+        })
         const res = await req.json();
+        if(res.success){
+            toast.success(`Welcome, ${res.data.username}`);
+        }
+        else{
+            toast.error(`${res.message}`);
+            throw new Error(res.message);
+        }
         setUser(res.data);
         localStorage.setItem("token", JSON.stringify(res.token));
     }
     const login = async (user) => {
-        const req = await fetch(`${process.env.REACT_APP_API_URL}/api/auth/v1/login`, {
+        const req = await toast.promise(fetch(`${process.env.REACT_APP_API_URL}/api/auth/v1/login`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify(user),
-        });
-        if(!req.ok){
-            throw new Error('Failed to login');
-        }
+        }), {
+            pending: 'Logging in...'
+        })
         const res = await req.json();
+        if(res.data){
+            toast.success(`Welcome, ${res.data.username}`);
+        }
+        else{
+            toast.error(`${res.message}`);
+            throw new Error(res.message);
+        }
         setUser(res.data);
         localStorage.setItem("token", JSON.stringify(res.token));
     }
     const logout = () => {
         setUser(null);
         localStorage.removeItem("token");
+        navigate('/login');
+        toast.success('Logged out');
     }
     useEffect(() => {
         const token = JSON.parse(localStorage.getItem("token"));

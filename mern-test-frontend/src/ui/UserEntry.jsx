@@ -1,9 +1,10 @@
 import React from 'react'
+import { toast } from 'react-toastify'
 
 const UserEntry = ({data, rank, setAllUsersData, setTimePeriod}) => {
   const handleClick = async () => {
     try {
-        const req = await fetch(`${process.env.REACT_APP_API_URL}/api/user/v1/claim-points`, {
+        const req = await toast.promise(fetch(`${process.env.REACT_APP_API_URL}/api/user/v1/claim-points`, {
             method: 'PATCH',
             headers: {
                 'Content-Type': 'application/json'
@@ -11,12 +12,17 @@ const UserEntry = ({data, rank, setAllUsersData, setTimePeriod}) => {
             body: JSON.stringify({
                 username: data.username || data._id
             })
+        }), {
+            pending: 'Loading...'
         })
-        if (!req.ok) {
-            throw new Error(`Failed to claim points: ${req.statusText}`)
-        }
         const res = await req.json();
-        console.log(res);
+        if(res.success){
+            toast.success(`Points successfully claimed for ${data.username || data._id}`);
+        }
+        else{
+            toast.error(`${res.message}`);
+            throw new Error(res.message);
+        }
         fetch(`${process.env.REACT_APP_API_URL}/api/user/v1/get-users`).then((res) => {
             if (!res.ok) {
                 throw new Error('Network response was not ok');
@@ -26,10 +32,10 @@ const UserEntry = ({data, rank, setAllUsersData, setTimePeriod}) => {
             setAllUsersData(data.data.sort((a, b) => b.Points - a.Points));
             setTimePeriod('');
         }).catch((err) => {
-            console.error('There has been a problem with fetch operation', err);
+            toast.error('There has been a problem with fetch operation', err);
         });
     } catch (e) {
-        console.error('Error claiming points:', e)
+        toast.error('Error claiming points:', e)
     }
   }
   return (
@@ -44,8 +50,8 @@ const UserEntry = ({data, rank, setAllUsersData, setTimePeriod}) => {
                 <p>Rank: {rank}</p>
             </div>
         </div>
-        <p className='text-orange-500'>Prize: &#8377;{data.Points || data.totalPointsAwarded}</p>
-        <p className='text-green-600'>{data.Points || data.totalPointsAwarded}</p>
+        <p className='text-orange-500'>Prize: &#8377;{data.Points || data.totalPointsAwarded || 0}</p>
+        <p className='text-green-600'>{data.Points || data.totalPointsAwarded || 0}</p>
     </div>
   )
 }

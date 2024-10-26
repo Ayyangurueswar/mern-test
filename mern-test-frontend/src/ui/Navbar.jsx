@@ -9,11 +9,11 @@ const Navbar = () => {
     setShow(!show);
   }
   return (
-    <div className='w-full flex items-center justify-between text-white px-6 py-3 bg-slate-700'>
-        <h1 className='text-4xl font-bold'>Leaderboard</h1>
+    <div className='w-full flex items-center justify-between max-sm:gap-4 text-white px-6 py-3 bg-slate-700'>
+        <h1 className='md:text-4xl sm:text-2xl max-sm:hidden font-bold'>Leaderboard</h1>
         {
           user ? 
-            <div className='w-1/5 flex items-center justify-between'>
+            <div className='xl:w-1/5 lg:w-1/4 md:w-1/3 sm:w-1/2 w-full flex items-center justify-between'>
               <Link to='/'>Home</Link>
               <Link to='/leaderboard'>Leaderboard</Link>
               <div className='relative'>
@@ -37,7 +37,7 @@ const Navbar = () => {
                     <hr className='h-0.5 w-full bg-slate-500 mt-0.5'/>
                   </div>
                   <div>
-                    <p>Points: {user.Points}</p>
+                    <p>Points: {user && user.Points}</p>
                     <hr className='h-0.5 w-full bg-slate-500 mt-0.5'/>
                   </div>
                   <button onClick={() => {

@@ -1,9 +1,36 @@
 import React, {useState} from 'react'
+import Modal from './Modal';
+import { toast } from 'react-toastify';
 
 const LeaderboardEntry = ({data, rank}) => {
   const [show, setShow] = useState(false);
+  const [history, setHistory] = useState([]);
   const handleClick = async () => {
-    
+    try{
+      const req = await toast.promise(fetch(`${process.env.REACT_APP_API_URL}/api/user/v1/your-history`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          username: data.username || data._id,
+        }),
+      }), {
+        pending: 'Loading history...',
+      })
+      const res = await req.json();
+      if(!res.success){
+        toast.error(res.message);
+        throw new Error(res.message);
+      }
+      setHistory(res.data);
+      setShow(true);
+    } catch (e) {
+      toast.error(`Failed to get history: ${e}`);
+    }
+  }
+  const onClose = () => {
+    setShow(false);
   }
   return (
     <div className='flex items-center justify-between p-4 rounded-md hover:bg-slate-200' key={data._id} onClick={handleClick}>
@@ -17,8 +44,18 @@ const LeaderboardEntry = ({data, rank}) => {
                 <p>Rank: {rank}</p>
             </div>
         </div>
-        <p className='text-orange-500'>Prize: &#8377;{data.Points || data.totalPointsAwarded}</p>
-        <p className='text-green-600'>{data.Points || data.totalPointsAwarded}</p>
+        <p className='text-orange-500'>Prize: &#8377;{data.Points || data.totalPointsAwarded || 0}</p>
+        <p className='text-green-600'>{data.Points || data.totalPointsAwarded || 0}</p>
+        <Modal show={show} title={`${data.username || data._id}'s History`} onClose={onClose}>
+          {
+            history.length > 0 ? history.map((event, i) => (
+              <div key={i} className='py-2 border-b-[1px] border-slate-600'>
+                <p>Date: {event.date}</p>
+                <p>Points: {event.pointsAwarded}</p>
+              </div>
+            )) : <p>No history found.</p>
+          }
+        </Modal>
     </div>
   )
 }

@@ -6,6 +6,8 @@ import { AuthProvider } from './context/AuthContext';
 import Login from './components/Login';
 import Home from './components/Home';
 import LeaderBoard from './components/LeaderBoard';
+import {ToastContainer} from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css';
 
 function App() {
   return (
@@ -19,6 +21,8 @@ function App() {
             <Route path='/login' element={<Login />}/>
             <Route path='/leaderboard' element={<LeaderBoard />}/>
           </Routes>
+          <div id='modal-root'></div>
+          <ToastContainer theme='colored' newestOnTop/>
         </AuthProvider>
       </Router>
     </div>

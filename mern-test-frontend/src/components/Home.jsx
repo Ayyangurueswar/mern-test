@@ -1,12 +1,16 @@
 import React, {useEffect, useState} from 'react'
 import { useNavigate } from 'react-router-dom';
 import UserEntry from '../ui/UserEntry';
+import { useAuth } from '../context/AuthContext';
+import { toast } from 'react-toastify';
 
 const Home = () => {
     const navigate = useNavigate();
     const [allUsersData, setAllUsersData] = useState([]);
     const [timePeriod, setTimePeriod] = useState('');
+    const [todayPoints, setTodayPoints] = useState();
     const token = localStorage.getItem('token');
+    const {user} = useAuth();
     useEffect(() => {
         if (!token) {
             navigate('/login')
@@ -20,12 +24,20 @@ const Home = () => {
         }).then((data) => {
             setAllUsersData(data.data.sort((a, b) => b.Points - a.Points));
         }).catch((err) => {
-            console.error('There has been a problem with your fetch operation', err);
+            toast.error('There has been a problem with your fetch operation', err);
         });
-    }, [token, navigate]);
+        fetch(`${process.env.REACT_APP_API_URL}/api/user/v1/your-daily-history`).then((res) => res.json()).then((data) => {
+            const points = data.data.filter((u) => u._id === user?.username);
+            setTodayPoints(points[0]?.totalPointsAwarded);
+        })
+    }, [token, navigate, user]);
     const handleTimePeriodChange = async (t) => {
         setTimePeriod(t);
-        const req = await fetch(`${process.env.REACT_APP_API_URL}/api/user/v1/your-${t}-history`);
+        const req = await toast.promise(fetch(`${process.env.REACT_APP_API_URL}/api/user/v1/your-${t}-history`), {
+            pending: 'Fetching data',
+            success: `${t} data fetched`,
+            error: 'Error fetching data'
+        })
         if (!req.ok) {
             throw new Error('Network response was not ok');
         }
@@ -33,11 +45,11 @@ const Home = () => {
         setAllUsersData(data.data.sort((a, b) => b.totalPointsAwarded - a.totalPointsAwarded));
     }
   return (
-    <div className='mt-10 w-4/5 mx-auto'>
+    <div className='my-10 w-4/5 mx-auto'>
         <div className='w-full bg-blue-500 px-6 py-4 flex items-center justify-between text-white'>
             <div>
-                <p>3982 Today</p>
-                <p>&#8377; 2894.00</p>
+                <p>{todayPoints || 0} Today</p>
+                <p>&#8377; {user ? user.Points : 0}</p>
             </div>
             <p>Leaderboard</p>
         </div>
