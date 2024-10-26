@@ -17,6 +17,7 @@ app.use(
   cors({
     origin: "https://mern-test-frontend-smoky.vercel.app", // Replace with the frontend's URL (React app)
     methods: "GET,POST,PUT,DELETE,PATCH", // Allowed methods
+    allowedHeaders: ['Content-Type', 'Authorization']
   })
 );
 
