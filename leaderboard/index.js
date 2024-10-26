@@ -12,7 +12,7 @@ const app = express();
 await connectDb();
 
 // Use cors middleware
-app.use(cors());
+app.options('*', cors());
 app.use(
   cors({
     origin: "https://mern-test-frontend-smoky.vercel.app", // Replace with the frontend's URL (React app)
@@ -27,6 +27,9 @@ app.use(cookieParser());
 
 // *********** All-Routes *************
 
+app.get("/", (req, res) => {
+  res.json("I'm coming from backend");
+});
 app.use("/api/auth/v1", auth);
 app.use("/api/user/v1", user);
 
