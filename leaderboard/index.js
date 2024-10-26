@@ -11,10 +11,10 @@ const app = express();
 // Use cors middleware
 app.use(cors());
 
-const __dirname = import.meta.dirname
+
 app.use(
   cors({
-    origin: "*", // Replace with the frontend's URL (React app)
+    origin: "https://mern-test-frontend-smoky.vercel.app", // Replace with the frontend's URL (React app)
     methods: "GET,POST,PUT,DELETE,PATCH", // Allowed methods
   })
 );
