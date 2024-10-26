@@ -8,6 +8,9 @@ import user from "./routes/user.routes.js";
 
 import cookieParser from "cookie-parser";
 const app = express();
+
+await connectDb();
+
 // Use cors middleware
 app.use(
   cors({
@@ -46,5 +49,4 @@ app.use((err, req, res, next) => {
 
 app.listen(7000, async () => {
   console.log("Server is running on port 7000");
-  await connectDb();
 });
