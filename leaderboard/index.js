@@ -1,5 +1,4 @@
 import express from "express";
-import path from "path";
 import { connectDb } from "./config/dbConenction.js";
 import cors from "cors"
 // *********** All-Routes *************
@@ -15,7 +14,7 @@ app.use(cors());
 const __dirname = import.meta.dirname
 app.use(
   cors({
-    origin: "https://mern-test-lyart.vercel.app", // Replace with the frontend's URL (React app)
+    origin: "*", // Replace with the frontend's URL (React app)
     methods: "GET,POST,PUT,DELETE,PATCH", // Allowed methods
   })
 );
@@ -29,18 +28,6 @@ app.use(cookieParser());
 
 app.use("/api/auth/v1", auth);
 app.use("/api/user/v1", user);
-
-if (process.env.NODE_ENV === 'production') {
-  app.use(express.static(path.join(__dirname, '../mern-test-frontend/build')));
-
-  app.get('*', (req, res) =>
-    res.sendFile(
-      path.resolve(__dirname, '../', 'mern-test-frontend', 'build', 'index.html')
-    )
-  );
-} else {
-  app.get('/', (req, res) => res.send('Please set to production'));
-}
 
 // for wrong apis
 app.use((req, res) => {

@@ -16,7 +16,7 @@ const Home = () => {
             navigate('/login')
             return;
         }
-        fetch(`/api/user/v1/get-users`).then((res) => {
+        fetch(`${process.env.REACT_APP_API_URL}/api/user/v1/get-users`).then((res) => {
             if (!res.ok) {
                 throw new Error('Network response was not ok');
             }
@@ -26,14 +26,14 @@ const Home = () => {
         }).catch((err) => {
             toast.error('There has been a problem with your fetch operation', err);
         });
-        fetch(`/api/user/v1/your-daily-history`).then((res) => res.json()).then((data) => {
+        fetch(`${process.env.REACT_APP_API_URL}/api/user/v1/your-daily-history`).then((res) => res.json()).then((data) => {
             const points = data.data.filter((u) => u._id === user?.username);
             setTodayPoints(points[0]?.totalPointsAwarded);
         })
     }, [token, navigate, user]);
     const handleTimePeriodChange = async (t) => {
         setTimePeriod(t);
-        const req = await toast.promise(fetch(`/api/user/v1/your-${t}-history`), {
+        const req = await toast.promise(fetch(`${process.env.REACT_APP_API_URL}/api/user/v1/your-${t}-history`), {
             pending: 'Fetching data',
             success: `${t} data fetched`,
             error: 'Error fetching data'

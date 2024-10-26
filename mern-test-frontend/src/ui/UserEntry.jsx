@@ -4,7 +4,7 @@ import { toast } from 'react-toastify'
 const UserEntry = ({data, rank, setAllUsersData, setTimePeriod}) => {
   const handleClick = async () => {
     try {
-        const req = await toast.promise(fetch(`/api/user/v1/claim-points`, {
+        const req = await toast.promise(fetch(`${process.env.REACT_APP_API_URL}/api/user/v1/claim-points`, {
             method: 'PATCH',
             headers: {
                 'Content-Type': 'application/json'
@@ -23,7 +23,7 @@ const UserEntry = ({data, rank, setAllUsersData, setTimePeriod}) => {
             toast.error(`${res.message}`);
             throw new Error(res.message);
         }
-        fetch(`/api/user/v1/get-users`).then((res) => {
+        fetch(`${process.env.REACT_APP_API_URL}/api/user/v1/get-users`).then((res) => {
             if (!res.ok) {
                 throw new Error('Network response was not ok');
             }
