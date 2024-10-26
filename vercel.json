@@ -3,7 +3,7 @@
     "rewrites": [
       {
         "source": "/(.*)",
-        "destination": "/leaderboard"
+        "destination": "/leaderboard/index.js"
       }
     ]
-  }
+}
