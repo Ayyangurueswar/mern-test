@@ -1,10 +1,10 @@
 {
   "name": "khud-ka-backend",
   "version": "1.0.0",
-  "main": "index.js",
+  "main": "api/index.js",
   "type": "module",
   "scripts": {
-    "dev": "nodemon leaderboard/index.js"
+    "dev": "nodemon api/index.js"
   },
   "author": "",
   "license": "ISC",

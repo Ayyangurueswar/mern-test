@@ -1,15 +1,22 @@
 import express from "express";
-import { connectDb } from "./config/dbConenction.js";
+import { connectDb } from "../config/dbConenction.js";
 import cors from "cors"
 // *********** All-Routes *************
-import auth from "./routes/auth.routes.js";
-import user from "./routes/user.routes.js";
+import auth from "../routes/auth.routes.js";
+import user from "../routes/user.routes.js";
 // *********** All-Routes *************
 
 import cookieParser from "cookie-parser";
 const app = express();
 
 await connectDb();
+
+app.options('*', (req, res) => {
+  res.header('Access-Control-Allow-Origin', '*');
+  res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS');
+  res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+  res.sendStatus(200);
+});
 
 // Use cors middleware
 app.use(
@@ -19,12 +26,6 @@ app.use(
     allowedHeaders: ['Content-Type', 'Authorization']
   })
 );
-app.options('*', (req, res) => {
-  res.header('Access-Control-Allow-Origin', '*');
-  res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS');
-  res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization');
-  res.sendStatus(200);
-});
 
 //middle wares
 app.use(express.json());
