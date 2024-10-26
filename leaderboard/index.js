@@ -15,7 +15,7 @@ app.use(cors());
 const __dirname = import.meta.dirname
 app.use(
   cors({
-    origin: "*", // Replace with the frontend's URL (React app)
+    origin: "https://mern-test-lyart.vercel.app", // Replace with the frontend's URL (React app)
     methods: "GET,POST,PUT,DELETE,PATCH", // Allowed methods
   })
 );
